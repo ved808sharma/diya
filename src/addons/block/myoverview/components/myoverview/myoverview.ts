@@ -27,6 +27,7 @@ import { CoreUtils } from '@services/utils/utils';
 import { CoreDomUtils } from '@services/utils/dom';
 import { CoreTextUtils } from '@services/utils/text';
 import { AddonCourseCompletion } from '@/addons/coursecompletion/services/coursecompletion';
+import { CoreNavigator } from '@services/navigator';
 
 const FILTER_PRIORITY = ['all', 'allincludinghidden', 'inprogress', 'future', 'past', 'favourite', 'hidden', 'custom'];
 
@@ -41,6 +42,18 @@ export class AddonBlockMyOverviewComponent extends CoreBlockBaseComponent implem
 
     @ViewChild('searchbar') searchbar?: IonSearchbar;
     @Input() downloadEnabled = false;
+
+    option = {
+        initialSlide:0,
+        spaceBetween: 0,
+        slidesPerView: 1.8,
+        slidesOffsetBefore: 6
+      }    
+
+      slideOpts = {
+        initialSlide: 1,
+        speed: 400,
+      };
 
     courses = {
         filter: '',
@@ -582,6 +595,17 @@ export class AddonBlockMyOverviewComponent extends CoreBlockBaseComponent implem
         this.isDestroyed = true;
         this.coursesObserver?.off();
         this.updateSiteObserver?.off();
+    }
+
+    openCourse(course:any): void {
+        CoreCourseHelper.openCourse(course);
+    }
+
+     /**
+     * Go to my courses.
+     */
+     openMyCourses(): void {
+        CoreNavigator.navigateToSitePath('courses/my');
     }
 
 }

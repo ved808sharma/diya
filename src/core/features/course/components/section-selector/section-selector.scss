@@ -12,4 +12,7 @@ core-progress-bar {
 
 ion-badge {
     text-align: start;
+} 
+:host {
+    --min-height: 58px;
 }

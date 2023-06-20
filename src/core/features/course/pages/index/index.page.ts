@@ -33,6 +33,7 @@ import { CONTENTS_PAGE_NAME } from '@features/course/course.module';
 @Component({
     selector: 'page-core-course-index',
     templateUrl: 'index.html',
+    styleUrls: ['courseindex.scss'],
 })
 export class CoreCourseIndexPage implements OnInit, OnDestroy {
 

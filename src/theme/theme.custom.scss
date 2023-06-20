@@ -8,8 +8,17 @@
  * Light Theme
  * -------------------------------------------
  */
+ 
 :root {
 
+    ion-item {
+        --border-style: none !important;
+     }
+
+     ion-header ion-toolbar {
+        --border-width: 0;
+        --border-color: #fff;
+    }
 }
 
 /*

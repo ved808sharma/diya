@@ -20,9 +20,10 @@
         <ion-refresher-content pullingText="{{ 'core.pulltorefresh' | translate }}"></ion-refresher-content>
     </ion-refresher>
 
+    <!-- #Ved -->
     <core-loading [hideUntil]="dataLoaded">
         <core-course-format [course]="course" [sections]="sections" [initialSectionId]="sectionId"
-            [initialSectionNumber]="sectionNumber" [downloadEnabled]="downloadEnabled" [moduleId]="moduleId"
+            [initialSectionNumber]="1" [downloadEnabled]="downloadEnabled" [moduleId]="moduleId"
             (completionChanged)="onCompletionChange($event)" class="core-course-format-{{course.format}}">
         </core-course-format>
     </core-loading>

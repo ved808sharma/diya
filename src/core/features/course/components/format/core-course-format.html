@@ -7,6 +7,13 @@
     </core-context-menu>
 </core-navbar-buttons>
 
+<img 
+    *ngIf="course?.overviewfiles[0]?.fileurl"
+    style=" object-fit: cover; height:150px;
+    width: 100%;"
+    src={{course?.overviewfiles[0]?.fileurl}} 
+    core-external-content alt="" />
+  
 <core-block-course-blocks *ngIf="loaded" [courseId]="course!.id" [hideBlocks]="!displayBlocks" [downloadEnabled]="downloadEnabled"
     [hideBottomBlocks]="selectedSection && selectedSection.id == allSectionsId && canLoadMore">
 
@@ -16,6 +23,7 @@
             <!-- Section selector. -->
             <core-dynamic-component [component]="sectionSelectorComponent" [data]="data">
 
+                <!--Section Selector-->
                 <div *ngIf="displaySectionSelector && sections && hasSeveralSections"
                     class="ion-text-wrap ion-justify-content-between ion-align-items-center core-button-selector-row"
                     [class.core-section-download]="downloadEnabled">
@@ -38,6 +46,7 @@
                     <!-- Section download. -->
                     <ng-container *ngTemplateOutlet="sectionDownloadTemplate; context: {section: selectedSection}"></ng-container>
                 </div>
+                
             </core-dynamic-component>
 
             <!-- Course summary. By default we only display the course progress. -->
@@ -123,15 +132,22 @@
 <ng-template #sectionTemplate let-section="section">
     <section *ngIf="!section.hiddenbynumsections && section.id != allSectionsId && section.id != stealthModulesSectionId">
         <!-- Title is only displayed when viewing all sections. -->
-        <ion-item-divider *ngIf="selectedSection?.id == allSectionsId && section.name" class="ion-text-wrap" color="light"
+        <ion-card>
+            <ion-card-content style="padding-bottom: 0px;
+            padding-top: 4px;
+            padding-left: 9px;">
+        <div style="padding: 10px;"  *ngIf="selectedSection?.id == allSectionsId && section.name" class="ion-text-wrap" color="light"
             [class.core-section-download]="downloadEnabled"
             [class.item-dimmed]="section.visible === 0 || section.uservisible === false">
+            
+            <!--Ved ... For R&D for availability-->
             <ion-label>
-                <h2>
+                <h2> 
                     <core-format-text [text]="section.name" contextLevel="course" [contextInstanceId]="course?.id">
-                    </core-format-text>
+                    </core-format-text> 
                 </h2>
-                <p *ngIf="section.visible === 0 || section.availabilityinfo">
+                 
+                <p *ngIf="section.visible === 0 || section.availabilityinfo && showRestriction">
                     <ion-badge color="info" *ngIf="section.visible === 0 && section.uservisible !== false" class="ion-text-wrap">
                         {{ 'core.course.hiddenfromstudents' | translate }}
                     </ion-badge>
@@ -146,14 +162,58 @@
             </ion-label>
             <!-- Section download. -->
             <ng-container *ngTemplateOutlet="sectionDownloadTemplate; context: {section: section}"></ng-container>
-        </ion-item-divider>
+        </div>
 
-        <ion-item class="ion-text-wrap" *ngIf="section.summary">
-            <ion-label>
-                <core-format-text [text]="section.summary" contextLevel="course" [contextInstanceId]="course?.id">
-                </core-format-text>
-            </ion-label>
-        </ion-item>
+        <!-- <ion-chip (click)="showHideSummary()" 
+            color="warning">
+            <ion-icon style="font-size: 24px;padding: 8px;float: right;" slot="icon-only" name="information-circle" aria-hidden="true"></ion-icon>
+            {{showSummary?"Show Summary":"Hide Summary"}}
+        </ion-chip> -->
+        
+        <!-- <ion-icon (click)="showHideRestriction()" *ngIf="section.visible === 0 || section.availabilityinfo" style="font-size: 24px;padding: 8px;float: right;" slot="icon-only" name="information-circle" aria-hidden="true"></ion-icon>
+         -->
+        </ion-card-content>
+        
+        <ion-button fill="clear" (click)="showHideSummary()">
+            <ion-icon *ngIf="showSummary" slot="icon-only" style="color: black;" name="eye" aria-hidden="true"></ion-icon>
+            <ion-icon *ngIf="!showSummary" slot="icon-only" style="color: black;" name="eye-off" aria-hidden="true"></ion-icon>
+            <span style="color:black; text-transform: capitalize;">{{showSummary?"Summary":"Summary"}}</span>
+        </ion-button>
+        <ion-button (click)="showHideRestriction()" fill="clear" *ngIf="section.visible === 0 || section.availabilityinfo">
+            <ion-icon style="color: #faca21;" name="information-circle" aria-hidden="true"></ion-icon><span style="color:black; text-transform: capitalize;"> Info </span>
+        </ion-button>
+        <ion-button fill="clear" *ngIf="section.visible === 0 || section.availabilityinfo">
+            <ion-icon style="color: #f1494f;" name="lock-closed" aria-hidden="true"></ion-icon> <span style="color:black; text-transform: capitalize;">Locked</span>
+        </ion-button>
+        </ion-card>
+
+        <!-- #Ved -->   
+         
+        
+        <!-- <ion-card style="box-shadow: 0;">
+            <ion-card-content>
+            <ion-item (click)="showHideSummary()">
+                <ion-label>{{showSummary?"Show Summary":"Hide Summary"}}</ion-label>
+                <ion-icon *ngIf="showSummary" class="ion-text-end" name="eye"></ion-icon>
+                <ion-icon *ngIf="!showSummary" class="ion-text-end" name="eye-off"></ion-icon>
+            </ion-item> 
+            </ion-card-content>
+        </ion-card> -->
+
+          <!--will create if condition my default it will
+            b hide on click it will toggle--->
+        <ng-container *ngIf="visible">
+            <ion-card>
+                <ion-card-content style="padding-left: 8px;">
+            <ion-item class="ion-text-wrap" *ngIf="section.summary">
+                <ion-label>
+                    <core-format-text [text]="section.summary" contextLevel="course" [contextInstanceId]="course?.id">
+                    </core-format-text>
+                </ion-label>
+            </ion-item>  
+            </ion-card-content>
+            </ion-card>
+        </ng-container> 
 
         <ng-container *ngFor="let module of section.modules">
             <core-course-module *ngIf="module.visibleoncoursepage !== 0" [module]="module" [courseId]="course?.id"

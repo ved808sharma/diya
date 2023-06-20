@@ -1,8 +1,51 @@
-<ion-item-divider sticky="true">
+<ion-slides pager="true" [options]="slideOpts" style="position: relative;">
+      <ion-slide>
+        <img 
+        style=" object-fit: cover; height:220px;
+        width: 100%;"
+        src="https://www.openstudycollege.com/osc/uploads/2023/02/online-courses-hero.gif" alt="" />
+        
+        <div style="position: absolute; top: 5em; left: 1em; text-align: left;">
+            <h2 style="font-weight: bold; color:white">Learning that gets you</h2>
+            <h5 style="color:antiquewhite">Skills for your present (and your future). Get started with us.</h5>
+        </div>
+
+      </ion-slide>
+      <ion-slide>
+        <img 
+        style=" object-fit: cover; height:220px;
+        width: 100%;"
+        src="https://www.faulkner.edu/wp-content/uploads/Student-taking-online-class.jpg" alt="" />
+       
+        <div style="position: absolute; top: 5em; left: 1em; text-align: left;">
+            <h2 style="font-weight: bold; color:white">Learning that gets you</h2>
+            <h5 style="color:antiquewhite">Skills for your present (and your future). Get started with us.</h5>
+        </div>
+
+      </ion-slide>
+      <ion-slide>
+        <img 
+        style=" object-fit: cover; height:220px;
+        width: 100%;"
+        src="https://elearningindustry.com/wp-content/uploads/2017/09/8-free-online-courses-to-improve-your-career-prospects.jpg" alt="" />
+        <div style="position: absolute; top: 5em; left: 1em; text-align: left;">
+            <h2 style="font-weight: bold; color:white">Learning that gets you</h2>
+            <h5 style="color:antiquewhite">Skills for your present (and your future). Get started with us.</h5>
+        </div>
+      </ion-slide>
+ 
+</ion-slides>
+
+
+<ion-item-divider sticky="false" style="
+                                background-color: transparent;
+                                box-shadow: none;
+                                border: 0;">
     <ion-label>
-        <h2>{{ 'addon.block_myoverview.pluginname' | translate }}</h2>
+        <h2 style="font-weight: bold;">{{ 'addon.block_myoverview.pluginname' | translate }}</h2> 
     </ion-label>
     <div slot="end" class="flex-row">
+        
         <!-- Download all courses. -->
         <div *ngIf="downloadCoursesEnabled && downloadEnabled && filteredCourses.length > 1 && !showFilter"
             class="core-button-spinner">
@@ -20,6 +63,7 @@
             <ion-spinner *ngIf="prefetchCoursesData[selectedFilter].loading" [attr.aria-label]="'core.loading' | translate">
             </ion-spinner>
         </div>
+        <a style="margin:auto; text-decoration: none;" (click)="openMyCourses()">View all</a>
         <core-context-menu>
             <core-context-menu-item *ngIf="loaded && showFilterSwitchButton()" [priority]="1000"
                 [content]="'core.courses.filtermycourses' | translate" (action)="switchFilter()" iconAction="fas-filter"
@@ -37,8 +81,11 @@
                 (action)="switchSort('lastaccess')" [iconAction]="sort == 'lastaccess' ? 'far-dot-circle' : 'far-circle'">
             </core-context-menu-item>
         </core-context-menu>
+        
     </div>
 </ion-item-divider>
+
+
 <core-loading [hideUntil]="loaded" [fullscreen]="false" class="margin">
     <div class="safe-padding-horizontal" [hidden]="showFilter || !showSelectorFilter">
         <!-- "Time" selector. -->
@@ -86,8 +133,66 @@
         [message]="'addon.block_myoverview.nocourses' | translate" inline="true">
     </core-empty-box>
 
-    <!-- List of courses. -->
-    <div class="safe-area-page">
+    
+    <!-- List of courses. Ved Dashboard Course Overview -->
+  
+    <ion-slides [options]="option" class="">
+        <ion-slide *ngFor="let course of filteredCourses">
+            <ion-card class="ion-text-start"
+            style="width: 100%;
+            height: auto;
+            border-radius: 12px;"
+            (click)="openCourse(course)">
+            <div>
+                <img 
+                style=" object-fit: cover; height:130px;
+                width: 100%;"
+                *ngIf="course.courseImage" [src]="course.courseImage" core-external-content alt="" />
+                
+                <img 
+                    style="object-fit: cover; height:130px;
+                    width: 100%;"
+                    *ngIf="!course.courseImage" 
+                    src="https://www.photocontestinsider.com/wp-content/uploads/2016/08/X4AAF4SU9Q.jpg" 
+                    alt="" />
+                    <ion-card-header>
+                        <ion-card-title style="font-size: 14px;">
+                            {{ (course.displayname.length>20)? (course.displayname | slice:0:20)+'...':(course.displayname) }}    
+                            <!-- {{course.displayname || course.fullname}} -->
+                        </ion-card-title>
+                    </ion-card-header>
+                    
+                    <ion-card-content>
+                        <ion-progress-bar [value]="0.5"></ion-progress-bar>
+                    </ion-card-content>
+               <!--     <ion-footer>
+                        <ion-row>
+                            <ion-col center text-center>
+                              <button>
+                                <ion-icon name="thumbs-up"></ion-icon>
+                                <div>1.5k Likes</div>
+                              </button>
+                            </ion-col>
+                            <ion-col center text-center>
+                              <button>
+                                <ion-icon name="text"></ion-icon>
+                                <div>4 Comments</div>
+                              </button>
+                            </ion-col>
+                            <ion-col center text-center>
+                              <button>
+                                <ion-icon name="time"></ion-icon>
+                                <div>11h ago</div>
+                              </button>
+                            </ion-col>
+                          </ion-row>
+                    </ion-footer> -->
+                </div>
+              </ion-card>
+        </ion-slide>
+    </ion-slides>
+  
+    <!-- <div class="safe-area-page">
         <ion-grid class="ion-no-padding">
             <ion-row class="ion-no-padding">
                 <ion-col *ngFor="let course of filteredCourses" class="ion-no-padding"
@@ -98,5 +203,5 @@
                 </ion-col>
             </ion-row>
         </ion-grid>
-    </div>
+    </div> -->
 </core-loading>

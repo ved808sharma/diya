@@ -113,6 +113,12 @@ export class CoreCourseFormatComponent implements OnInit, OnChanges, OnDestroy {
     protected lastCourseFormat?: string;
     protected sectionSelectorExpanded = false;
 
+    showSummary:boolean = true
+    showRestriction:boolean = false;
+
+    //hiding info box
+    visible:boolean = false
+
     constructor(
         protected content: IonContent,
         protected elementRef: ElementRef,
@@ -673,6 +679,16 @@ export class CoreCourseFormatComponent implements OnInit, OnChanges, OnDestroy {
         }
 
         this.progress = this.course.progress;
+    }
+
+    //onclick toggling both
+    showHideSummary(){
+        this.showSummary = !this.showSummary; //not equal to condition
+        this.visible = !this.visible
+    }
+
+    showHideRestriction(){
+        this.showRestriction = !this.showRestriction;
     }
 
 }

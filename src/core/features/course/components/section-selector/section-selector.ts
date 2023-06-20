@@ -35,6 +35,11 @@ export class CoreCourseSectionSelectorComponent implements OnInit {
     @Input() course?: CoreCourseAnyCourseData;
 
     stealthModulesSectionId = CoreCourseProvider.STEALTH_MODULES_SECTION_ID;
+    
+    showSummary:boolean = false
+
+    //hiding info box
+    visible:boolean = false
 
     /**
      * Component being initialized.
@@ -81,6 +86,12 @@ export class CoreCourseSectionSelectorComponent implements OnInit {
         ModalController.dismiss();
     }
 
+    //onclick toggling both
+    showHideSummary(): void {
+        this.showSummary = !this.showSummary; //not equal to condition
+        this.visible = !this.visible
+    }
+
     /**
      * Select a section.
      *
@@ -91,6 +102,8 @@ export class CoreCourseSectionSelectorComponent implements OnInit {
             ModalController.dismiss(section);
         }
     }
+
+    
 
 }
 
